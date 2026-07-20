@@ -1,5 +1,5 @@
 <div class="mod-s15">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0" rel="stylesheet">
 
   <style>
@@ -28,7 +28,7 @@
     .mod-s15 {
       width: 100%;
       height: 100vh;
-      /* Vibrant mesh gradient replicating the provided image */
+      max-height: 100vh;
       background-color: #dbeafe;
       background-image: 
         radial-gradient(circle at 55% 35%, rgba(163, 230, 53, 0.85) 0%, rgba(250, 204, 21, 0.6) 15%, rgba(244, 114, 182, 0.5) 30%, rgba(192, 132, 252, 0.3) 50%, transparent 70%),
@@ -45,37 +45,55 @@
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.8);
       color: #0f172a;
-      padding: 18px 32px;
-      text-align: left;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
+      padding: 12px 28px;
       display: flex;
-      align-items: center;
+      align-items: baseline;
       gap: 12px;
       z-index: 10;
       box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      flex-wrap: wrap;
     }
-    .mod-s15__header::before {
+    .mod-s15__title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+    .mod-s15__title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mod-s15__title::before {
       content: '';
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: #84cc16; /* Chartreuse dot matching the aura */
+      background: #84cc16;
       border-radius: 50%;
       box-shadow: 0 0 10px #84cc16;
     }
+    .mod-s15__hint {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #475569;
+    }
     .mod-s15__viewer {
       flex: 1;
-      padding: 24px 24px 0;
+      padding: 10px 24px 0;
       position: relative;
       min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
     .mod-s15__frame-container {
-      height: 100%;
+      flex: 1;
+      width: 100%;
       background: #ffffff;
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08),
                   0 0 0 1px rgba(0, 0, 0, 0.03);
@@ -88,7 +106,7 @@
       display: block;
     }
     .mod-s15__controls {
-      padding: 20px 32px;
+      padding: 12px 28px;
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
@@ -105,12 +123,12 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 24px;
-      font-size: 0.9rem;
+      padding: 8px 20px;
+      font-size: 0.85rem;
       font-weight: 600;
       border: none;
-      border-radius: 9999px; /* Stark pill shape */
-      background: #0f172a; /* Dark button matching reference */
+      border-radius: 9999px;
+      background: #0f172a;
       color: #ffffff;
       cursor: pointer;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,7 +147,7 @@
       transform: none;
     }
     .mod-s15__counter {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: #64748b;
       letter-spacing: 0.01em;
@@ -153,17 +171,21 @@
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     @media (max-width: 700px) {
-      .mod-s15__header { padding: 14px 20px; font-size: 0.85rem; }
-      .mod-s15__viewer { padding: 16px 16px 0; }
-      .mod-s15__frame-container { border-radius: 16px; }
-      .mod-s15__controls { padding: 16px 20px; justify-content: center; }
-      .mod-s15__btn { padding: 10px 20px; font-size: 0.85rem; flex: 1 1 auto; justify-content: center; }
-      .mod-s15__counter { order: -1; width: 100%; text-align: center; margin-bottom: 4px; }
+      .mod-s15__header { padding: 10px 16px; }
+      .mod-s15__viewer { padding: 8px 12px 0; }
+      .mod-s15__frame-container { border-radius: 12px; }
+      .mod-s15__controls { padding: 10px 16px; justify-content: center; }
+      .mod-s15__btn { padding: 8px 16px; font-size: 0.8rem; flex: 1 1 auto; justify-content: center; }
+      .mod-s15__counter { order: -1; width: 100%; text-align: center; margin-bottom: 2px; }
+      .mod-s15__hint { font-size: 1rem; }
     }
   </style>
 
   <div class="mod-s15__header">
-    AI Capability Building Ecosystem
+    <div class="mod-s15__title-group">
+      <span class="mod-s15__title">AI Capability Building Ecosystem</span>
+      <span class="mod-s15__hint">(Hover to explore elements)</span>
+    </div>
   </div>
 
   <div class="mod-s15__viewer">
