@@ -1,0 +1,295 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #317eff;
+            --distorted-red: #ff4d4d;
+            --foggy-yellow: #c49c06;
+            --clear-green: #2ecc71;
+            --text-main: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1050px;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+
+        /* LEFT PANEL */
+        .content-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            font-size: 18px;
+        }
+
+        h2 { font-size: 32px; margin-bottom: 15px; color: var(--primary-blue); font-weight: 600; }
+        
+        .instruction { line-height: 1.6; margin-bottom: 30px; color: #444; }
+        .highlight { color: var(--primary-blue); font-weight: 600; }
+
+        .options { display: flex; flex-direction: column; gap: 15px; }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+            border: 2px solid #eee;
+            font-weight: 600;
+        }
+
+        .blink-not-selected {
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: #eee; }
+            50% { border-color: var(--primary-blue); }
+            100% { border-color: #eee; }
+        }
+
+        .option-item.distorted.active { border-color: var(--distorted-red); color: var(--distorted-red); }
+        .option-item.foggy.active { border-color: var(--foggy-yellow); color: var(--foggy-yellow); }
+        .option-item.clear.active { border-color: var(--clear-green); color: var(--clear-green); }
+        
+        .option-item.clear:hover { box-shadow: 0 0 25px rgba(0, 255, 0, 0.5); border-color: var(--clear-green); }
+
+        .option-item i { margin-right: 15px; font-size: 24px; }
+
+        /* RIGHT PANEL */
+        .image-panel {
+            flex: 1.2;
+            position: relative;
+            background: #111;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #target-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+        }
+
+        /* LENS BASE */
+        #lens {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 4px solid white;
+            pointer-events: none;
+            z-index: 10;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3), 0 0 30px rgba(0,0,0,0.5);
+        }
+
+/* DISTORTED: BIG PARTICLES + STATIC HUE + SCRATCHES + DIRT */
+.effect-distorted { 
+    border-color: var(--distorted-red) !important; 
+    /* Static Hue & High Contrast */
+    filter: hue-rotate(60deg) contrast(180%) brightness(110%) saturate(1.5); 
+}
+
+.effect-distorted::before {
+    content: "";
+    position: absolute;
+    width: 200%; height: 200%;
+    top: -50%; left: -50%;
+    /* Big Particles & Dirt Texture */
+    background-image: 
+        url('https://www.transparenttextures.com/patterns/stardust.png'), 
+        url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); 
+    background-size: 600px, 600px; /* Increased size for 'big' particles */
+    opacity: 0.9;
+    animation: noise-move 0.3s infinite steps(3); /* Jittery movement for grit */
+    filter: brightness(2) contrast(150%);
+    z-index: 2;
+}
+
+/* Big White Scratches */
+.effect-distorted::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: 
+        repeating-linear-gradient(
+            35deg,
+            transparent,
+            transparent 70px,
+            rgba(255, 255, 255, 0.4) 76px,
+            transparent 75px
+        ),
+        linear-gradient(
+            110deg,
+            transparent 45%,
+            rgba(255, 255, 255, 0.2) 46%,
+            transparent 47%
+        );
+    z-index: 3;
+    opacity: 0.8;
+}
+
+/* Removed hue-shift animation to keep hue static as requested */
+@keyframes noise-move {
+    0% { transform: translate(0,0); }
+    50% { transform: translate(-5%, -2%); }
+    100% { transform: translate(2%, 5%); }
+}
+
+        /* FOGGY: Blur + Overlapping Bokeh */
+        .effect-foggy { 
+            border-color: var(--foggy-yellow) !important; 
+            filter: blur(6px) brightness(1.1); 
+        }
+
+        .effect-foggy::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            /* Bokeh Effect: Multiple overlapping circles */
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.6) 0%, transparent 20%),
+                radial-gradient(circle at 70% 20%, rgba(255,255,255,0.4) 0%, transparent 25%),
+                radial-gradient(circle at 40% 80%, rgba(255,255,255,0.5) 0%, transparent 15%),
+                radial-gradient(circle at 80% 85%, rgba(255,255,255,0.3) 0%, transparent 30%);
+            z-index: 11;
+            mix-blend-mode: screen;
+        }
+
+        /* CLEAR: VIBRANCE */
+        .effect-clear { border-color: var(--clear-green) !important; filter: contrast(1.1) brightness(1.15); }
+
+        .footer-tag {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 18px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            transition: background 0.4s ease;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="content-panel">
+        <h2>Capture Quality</h2>
+        <div class="instruction">
+            In this <span class="highlight">Camera System</span> you check if the AI model’s capture quality or output/description is distorted, blurred or clear.
+        </div>
+        
+        <div class="options">
+            <div id="opt-distorted" class="option-item distorted active" onmouseover="activate('distorted')" onclick="activate('distorted')">
+                <i class="material-icons">warning</i> Distorted Capture
+            </div>
+            <div id="opt-foggy" class="option-item foggy blink-not-selected" onmouseover="activate('foggy')" onclick="activate('foggy')">
+                <i class="material-icons">filter_drama</i> Blurred Capture
+            </div>
+            <div id="opt-clear" class="option-item clear blink-not-selected" onmouseover="activate('clear')" onclick="activate('clear')">
+                <i class="material-icons">center_focus_strong</i> Clear Capture
+            </div>
+        </div>
+    </div>
+
+    <div class="image-panel" id="img-area">
+        <img id="target-img" src="https://images.prismic.io/turing/aMHbqWGNHVfTPAQZ_robotics-datapacks-compressed.webp?auto=format%2Ccompress&amp;fit=max&amp;w=1080">
+        <div id="lens" class="effect-distorted" style="left: 99.9909px; top: 162.271px; background-image: url(&quot;https://images.prismic.io/turing/aMHbqWGNHVfTPAQZ_robotics-datapacks-compressed.webp?auto=format%2Ccompress&amp;fit=max&amp;w=1080&quot;); background-size: 730.475px 873.175px; background-position: -228.385px -328.033px;"></div>
+        <div id="footer" class="footer-tag" style="background: var(--distorted-red);">invents, stereotypes, or overreaches</div>
+    </div>
+</div>
+
+<script>
+    const lens = document.getElementById('lens');
+    const imgArea = document.getElementById('img-area');
+    const img = document.getElementById('target-img');
+    const footer = document.getElementById('footer');
+    
+    let isHovering = false;
+    let angle = 0;
+
+    const data = {
+        distorted: { color: '#ff4d4d', text: 'Distorted: Invents, stereotypes, or overreaches', effect: 'effect-distorted' },
+        foggy: { color: '#c49c06', text: 'Blurred: Adds assumptions or soft guesses', effect: 'effect-foggy' },
+        clear: { color: '#2ecc71', text: 'Clear: Describes only what is visible', effect: 'effect-clear' }
+    };
+
+    function activate(type) {
+        document.querySelectorAll('.option-item').forEach(el => {
+            el.classList.remove('active', 'blink-not-selected');
+            if(el.id !== 'opt-' + type) el.classList.add('blink-not-selected');
+        });
+        
+        const activeOpt = document.getElementById('opt-' + type);
+        activeOpt.classList.add('active');
+        activeOpt.classList.remove('blink-not-selected');
+
+        footer.innerText = data[type].text;
+        footer.style.background = data[type].color;
+        lens.className = data[type].effect;
+    }
+
+    function updateLens(x, y) {
+        const rect = imgArea.getBoundingClientRect();
+        lens.style.left = (x - lens.offsetWidth / 2) + 'px';
+        lens.style.top = (y - lens.offsetHeight / 2) + 'px';
+
+        const mag = 1.6; 
+        lens.style.backgroundImage = `url('${img.src}')`;
+        lens.style.backgroundSize = (rect.width * mag) + "px " + (rect.height * mag) + "px";
+        lens.style.backgroundPosition = "-" + ((x * mag) - lens.offsetWidth / 2) + "px -" + ((y * mag) - lens.offsetHeight / 2) + "px";
+    }
+
+    imgArea.addEventListener('mousemove', (e) => {
+        isHovering = true;
+        const rect = imgArea.getBoundingClientRect();
+        updateLens(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    imgArea.addEventListener('mouseleave', () => { isHovering = false; });
+
+    function animate() {
+        if (!isHovering) {
+            angle += 0.015;
+            const rect = imgArea.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const x = centerX + Math.cos(angle) * 100;
+            const y = centerY + Math.sin(angle * 0.7) * 60;
+            updateLens(x, y);
+        }
+        requestAnimationFrame(animate);
+    }
+    
+    img.onload = () => animate();
+    if(img.complete) animate();
+</script>
+
+</body></html>

@@ -1,0 +1,292 @@
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff}
+.a2b9-outer{background:#fff;width:100%}
+.a2b9-wrap{max-width:860px;margin:0 auto;padding:48px 40px}
+.a2b9-tag{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#317eff;margin-bottom:8px}
+.a2b9-title{font-family:'Poppins',sans-serif;font-size:22px;font-weight:700;color:#0f172a;margin-bottom:24px}
+.a2b9-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+
+/* ══════════════════════════════
+   LEFT — VAGUE
+══════════════════════════════ */
+.a2b9-vague{
+  background:#fff5f5;
+  border:2px solid #fecaca;
+  border-radius:14px;padding:24px;
+  cursor:default;
+  transition:border-color 0.3s,box-shadow 0.3s,background 0.3s;
+}
+.a2b9-vague:hover{
+  background:#fff0f0;
+  border-color:#ef4444;
+  box-shadow:0 0 0 4px rgba(239,68,68,0.1),0 8px 24px rgba(239,68,68,0.15);
+}
+.a2b9-vague-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:16px;
+}
+.a2b9-vague-head .material-icons{font-size:24px;color:#ef4444}
+.a2b9-vague-label{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ef4444}
+
+/* — GUESS ITEMS hidden by default, shown on hover — */
+.a2b9-guess-label{
+  font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;color:#ef4444;
+  margin-bottom:8px;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.4s ease,opacity 0.4s ease;
+}
+.a2b9-guesses{
+  display:flex;flex-direction:column;gap:6px;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height 0.6s ease,opacity 0.5s ease;
+}
+.a2b9-vague:hover .a2b9-guess-label{max-height:40px;opacity:1}
+.a2b9-vague:hover .a2b9-guesses{max-height:200px;opacity:1}
+
+.a2b9-guess{
+  font-family:'Poppins',sans-serif;font-size:13px;color:#dc2626;
+  display:flex;align-items:center;gap:8px;
+  opacity:0;transform:translateX(-8px);
+  transition:opacity 0.3s ease,transform 0.3s ease;
+}
+.a2b9-vague:hover .a2b9-guess:nth-child(1){opacity:1;transform:none;transition-delay:0.05s}
+.a2b9-vague:hover .a2b9-guess:nth-child(2){opacity:1;transform:none;transition-delay:0.12s}
+.a2b9-vague:hover .a2b9-guess:nth-child(3){opacity:1;transform:none;transition-delay:0.19s}
+.a2b9-vague:hover .a2b9-guess:nth-child(4){opacity:1;transform:none;transition-delay:0.26s}
+.a2b9-vague:hover .a2b9-guess:nth-child(5){opacity:1;transform:none;transition-delay:0.33s}
+.a2b9-guess .material-icons{font-size:16px}
+
+/* — CHAT BUBBLE — */
+.a2b9-chat-wrap{
+  display:flex;flex-direction:column;gap:6px;margin-bottom:14px;
+}
+.a2b9-chat-from{
+  font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;
+  color:#94a3b8;letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:2px;
+}
+.a2b9-bubble{
+  background:#fff;
+  border:1px solid #fecaca;
+  border-radius:4px 14px 14px 14px;
+  padding:12px 16px;
+  font-family:'Poppins',sans-serif;font-size:16px;
+  font-style:italic;color:#7f1d1d;
+  min-height:44px;
+  position:relative;
+  transition:background 0.3s,border-color 0.3s;
+}
+.a2b9-vague:hover .a2b9-bubble{
+  background:#fff8f8;
+  border-color:#ef4444;
+}
+/* chat tail */
+.a2b9-bubble::before{
+  content:'';
+  position:absolute;top:0;left:-7px;
+  border-width:0 8px 8px 0;
+  border-style:solid;
+  border-color:transparent #fecaca transparent transparent;
+}
+.a2b9-bubble::after{
+  content:'';
+  position:absolute;top:1px;left:-5px;
+  border-width:0 7px 7px 0;
+  border-style:solid;
+  border-color:transparent #fff transparent transparent;
+}
+.a2b9-vague:hover .a2b9-bubble::after{
+  border-color:transparent #fff8f8 transparent transparent;
+}
+/* cursor */
+.a2b9-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:#ef4444;margin-left:2px;vertical-align:middle;
+  animation:a2b9blink 0.8s infinite;
+}
+@keyframes a2b9blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* X badge on vague hover */
+.a2b9-x-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:#ef4444;color:#fff;
+  font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:100px;
+  margin-top:8px;
+  opacity:0;transform:scale(0.7);
+  transition:opacity 0.3s 0.2s ease,transform 0.3s 0.2s ease;
+}
+.a2b9-x-badge .material-icons{font-size:14px}
+.a2b9-vague:hover .a2b9-x-badge{opacity:1;transform:scale(1)}
+
+/* ══════════════════════════════
+   RIGHT — SPECIFIC
+══════════════════════════════ */
+.a2b9-spec{
+  background:#f0fdf4;
+  border:2px solid #bbf7d0;
+  border-radius:14px;padding:24px;
+  cursor:default;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.a2b9-spec:hover{
+  border-color:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,0.1),0 8px 24px rgba(34,197,94,0.12);
+}
+.a2b9-spec-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.a2b9-spec-head .material-icons{font-size:24px;color:#22c55e}
+.a2b9-spec-label{font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#15803d}
+
+.a2b9-gcrf-rows{display:flex;flex-direction:column;gap:8px}
+.a2b9-gcrf-row{
+  background:#fff;border-radius:8px;padding:10px 14px;
+  border-left:3px solid #22c55e;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-left-color 0.22s ease,
+    background 0.22s ease;
+  cursor:default;
+}
+.a2b9-gcrf-row:hover{
+  transform:translateX(4px) scale(1.01);
+  background:#f0fff4;
+  border-left-color:#16a34a;
+  box-shadow:0 0 0 3px rgba(34,197,94,0.12),0 4px 14px rgba(34,197,94,0.15);
+}
+.a2b9-gcrf-key{
+  font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;color:#15803d;margin-bottom:3px;
+}
+.a2b9-gcrf-val{font-family:'Poppins',sans-serif;font-size:13px;color:#334155;line-height:1.5}
+
+/* ══════════════════════════════
+   FOOTER — always glowing
+══════════════════════════════ */
+.a2b9-foot{
+  background:#0f172a;
+  border-radius:12px;padding:18px 22px;
+  font-family:'Poppins',sans-serif;font-size:15px;
+  color:rgba(255,255,255,0.8);line-height:1.6;text-align:center;
+  animation:a2b9footglow 3s ease-in-out infinite;
+  transition:transform 0.25s ease;
+  cursor:default;
+}
+.a2b9-foot:hover{transform:translateY(-2px)}
+@keyframes a2b9footglow{
+  0%,100%{box-shadow:0 0 8px rgba(49,126,255,0.2),0 0 0 1px rgba(49,126,255,0.15)}
+  50%{box-shadow:0 0 22px rgba(49,126,255,0.45),0 0 0 1px rgba(49,126,255,0.4)}
+}
+.a2b9-foot strong{color:#317eff}
+
+@media(max-width:580px){.a2b9-cols{grid-template-columns:1fr}}
+</style></head><body>
+<div class="a2b9-outer">
+  <div class="a2b9-wrap">
+    <div class="a2b9-tag">Seeing the Difference</div>
+    <div class="a2b9-title">Vague vs. Specific</div>
+    <div class="a2b9-cols">
+
+      <!-- LEFT: VAGUE -->
+      <div class="a2b9-vague" id="a2b9vague">
+        <div class="a2b9-vague-head">
+          <span class="material-icons">close</span>
+          <span class="a2b9-vague-label">Vague Prompt</span>
+        </div>
+        <div class="a2b9-chat-wrap">
+          <div class="a2b9-chat-from">You typed:</div>
+          <div class="a2b9-bubble">
+            <span id="a2b9typed"></span><span class="a2b9-cursor" id="a2b9cur" style="display: inline-block;"></span>
+          </div>
+          <div class="a2b9-x-badge"><span class="material-icons">close</span>Too vague — Claude Code has to guess</div>
+        </div>
+        <div class="a2b9-guess-label">What Claude Code must guess:</div>
+        <div class="a2b9-guesses">
+          <div class="a2b9-guess"><span class="material-icons">help_outline</span>What kind of report?</div>
+          <div class="a2b9-guess"><span class="material-icons">help_outline</span>From what data?</div>
+          <div class="a2b9-guess"><span class="material-icons">help_outline</span>For what audience?</div>
+          <div class="a2b9-guess"><span class="material-icons">help_outline</span>In what format?</div>
+          <div class="a2b9-guess"><span class="material-icons">help_outline</span>How often?</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: SPECIFIC -->
+      <div class="a2b9-spec">
+        <div class="a2b9-spec-head">
+          <span class="material-icons">check_circle</span>
+          <span class="a2b9-spec-label">Specific Prompt (GCRF)</span>
+        </div>
+        <div class="a2b9-gcrf-rows">
+          <div class="a2b9-gcrf-row">
+            <div class="a2b9-gcrf-key">Goal</div>
+            <div class="a2b9-gcrf-val">Create a weekly summary report of our support ticket volume.</div>
+          </div>
+          <div class="a2b9-gcrf-row">
+            <div class="a2b9-gcrf-key">Context</div>
+            <div class="a2b9-gcrf-val">CSV export from Zendesk every Friday. Columns: Date, Ticket ID, Category, Status, Agent Name.</div>
+          </div>
+          <div class="a2b9-gcrf-row">
+            <div class="a2b9-gcrf-key">Rules</div>
+            <div class="a2b9-gcrf-val">Group by Category. Show total tickets and % resolved. Output as HTML for Slack.</div>
+          </div>
+          <div class="a2b9-gcrf-row">
+            <div class="a2b9-gcrf-key">Feedback</div>
+            <div class="a2b9-gcrf-val">Readable on mobile without horizontal scrolling.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="a2b9-foot">The specific version takes <strong>30 extra seconds</strong> to write and saves hours of back-and-forth. It also produces a result you can actually use on the first try.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var typed = document.getElementById('a2b9typed');
+  var cursor = document.getElementById('a2b9cur');
+  var vague = document.getElementById('a2b9vague');
+  var full = '"Make a report."';
+  var typeTimer = null;
+  var isHovered = false;
+
+  function startTyping(){
+    typed.textContent = '';
+    cursor.style.display = 'inline-block';
+    var i = 0;
+    typeTimer = setInterval(function(){
+      if(!isHovered){ clearInterval(typeTimer); return; }
+      if(i <= full.length){
+        typed.textContent = full.slice(0, i);
+        i++;
+      } else {
+        clearInterval(typeTimer);
+        // cursor stays blinking after done
+      }
+    }, 55);
+  }
+
+  function resetTyping(){
+    clearInterval(typeTimer);
+    typed.textContent = '';
+    cursor.style.display = 'inline-block';
+  }
+
+  vague.addEventListener('mouseenter', function(){
+    isHovered = true;
+    resetTyping();
+    setTimeout(startTyping, 120);
+  });
+
+  vague.addEventListener('mouseleave', function(){
+    isHovered = false;
+    clearInterval(typeTimer);
+    typed.textContent = '';
+  });
+})();
+</script>
+</body></html>

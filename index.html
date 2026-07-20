@@ -1,0 +1,245 @@
+<div class="mod-s15">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0" rel="stylesheet">
+
+  <style>
+    .mod-s15,
+    .mod-s15 * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .mod-s15 .material-symbols-rounded {
+      font-family: 'Material Symbols Rounded' !important;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      font-feature-settings: 'liga';
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+    }
+    .mod-s15 {
+      width: 100%;
+      height: 100vh;
+      /* Vibrant mesh gradient replicating the provided image */
+      background-color: #dbeafe;
+      background-image: 
+        radial-gradient(circle at 55% 35%, rgba(163, 230, 53, 0.85) 0%, rgba(250, 204, 21, 0.6) 15%, rgba(244, 114, 182, 0.5) 30%, rgba(192, 132, 252, 0.3) 50%, transparent 70%),
+        radial-gradient(circle at 10% 20%, rgba(216, 180, 254, 0.8) 0%, transparent 50%),
+        radial-gradient(circle at 90% 85%, rgba(56, 189, 248, 0.9) 0%, transparent 60%),
+        radial-gradient(circle at 20% 90%, rgba(96, 165, 250, 0.6) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .mod-s15__header {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+      color: #0f172a;
+      padding: 18px 32px;
+      text-align: left;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+    .mod-s15__header::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #84cc16; /* Chartreuse dot matching the aura */
+      border-radius: 50%;
+      box-shadow: 0 0 10px #84cc16;
+    }
+    .mod-s15__viewer {
+      flex: 1;
+      padding: 24px 24px 0;
+      position: relative;
+      min-height: 0;
+    }
+    .mod-s15__frame-container {
+      height: 100%;
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08),
+                  0 0 0 1px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+    .mod-s15__frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .mod-s15__controls {
+      padding: 20px 32px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 20;
+      flex-wrap: wrap;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.02);
+    }
+    .mod-s15__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 9999px; /* Stark pill shape */
+      background: #0f172a; /* Dark button matching reference */
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+    .mod-s15__btn:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25);
+    }
+    .mod-s15__btn:disabled {
+      background: #f1f5f9;
+      color: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .mod-s15__counter {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #64748b;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .mod-s15__counter strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .mod-s15__progress {
+      height: 4px;
+      background: #f1f5f9;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .mod-s15__progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #84cc16, #c084fc);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (max-width: 700px) {
+      .mod-s15__header { padding: 14px 20px; font-size: 0.85rem; }
+      .mod-s15__viewer { padding: 16px 16px 0; }
+      .mod-s15__frame-container { border-radius: 16px; }
+      .mod-s15__controls { padding: 16px 20px; justify-content: center; }
+      .mod-s15__btn { padding: 10px 20px; font-size: 0.85rem; flex: 1 1 auto; justify-content: center; }
+      .mod-s15__counter { order: -1; width: 100%; text-align: center; margin-bottom: 4px; }
+    }
+  </style>
+
+  <div class="mod-s15__header">
+    AI Capability Building Ecosystem
+  </div>
+
+  <div class="mod-s15__viewer">
+    <div class="mod-s15__frame-container">
+      <iframe id="demoFrame" class="mod-s15__frame" src="Claude Code 0.html" title="Module slide preview"></iframe>
+      <div class="mod-s15__progress">
+        <div class="mod-s15__progress-bar" id="progressBar" style="width: 7.69%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mod-s15__controls">
+    <button id="prevBtn" class="mod-s15__btn" type="button">
+      <span class="material-symbols-rounded" aria-hidden="true">arrow_back</span>
+      Previous
+    </button>
+    <span class="mod-s15__counter">
+      Slide <strong><span id="current">1</span></strong> of 13
+    </span>
+    <button id="nextBtn" class="mod-s15__btn" type="button">
+      Next
+      <span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span>
+    </button>
+  </div>
+
+  <script>
+    (function(){
+      var root = document.currentScript.closest('.mod-s15');
+      if(!root) return;
+
+      var files = [
+        "Claude Code 0.html",
+        "Claude Code 1.html",
+        "Claude Code 2.html",
+        "Claude Code 3.html",
+        "Claude Code 4.html",
+        "Claude Code Recap 6.html",
+        "Audio Capability 1.html",
+        "Code Capability 1.html",
+        "Image Capability 1.html",
+        "Image Capability 2.html",
+        "STEM Capability 1.html",
+        "STEM Capability 2.html",
+        "STEM Capability 3.html"
+      ];
+
+      var currentIndex = 0;
+      var frame = root.querySelector('#demoFrame');
+      var currentEl = root.querySelector('#current');
+      var progressBar = root.querySelector('#progressBar');
+      var prevBtn = root.querySelector('#prevBtn');
+      var nextBtn = root.querySelector('#nextBtn');
+
+      function update() {
+        frame.src = files[currentIndex];
+        currentEl.textContent = currentIndex + 1;
+        progressBar.style.width = ((currentIndex + 1) / files.length * 100) + '%';
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === files.length - 1;
+      }
+
+      nextBtn.addEventListener('click', function(){
+        if(currentIndex < files.length - 1){
+          currentIndex++;
+          update();
+        }
+      });
+
+      prevBtn.addEventListener('click', function(){
+        if(currentIndex > 0){
+          currentIndex--;
+          update();
+        }
+      });
+
+      update();
+    })();
+  </script>
+</div>

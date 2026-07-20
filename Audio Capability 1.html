@@ -1,0 +1,202 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #317eff;
+            --bg-light: #f9fbff;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .rise-container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        h2 { font-weight: 600; font-size: 28px; margin: 0; color: #333; }
+        p.subtitle { font-size: 18px; color: #666; margin: 10px 0 20px 0; }
+
+        /* Animation Section */
+        .wave-box {
+            position: relative;
+            height: 120px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(49, 126, 254, 0.1);
+        }
+
+        .filter-line {
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            bottom: 10%;
+            width: 3px;
+            background: #ff4d4d;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+            z-index: 10;
+        }
+
+        /* Vertical Cards Section */
+        .items-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .list-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+            border: 2px solid transparent;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.3s; }
+        .list-item:nth-child(2) { animation-delay: 0.5s; }
+
+        .list-item.active, .list-item:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 15px 30px rgba(49, 126, 254, 0.1);
+        }
+
+        .material-icons {
+            margin-bottom: 15px;
+            font-size: 40px;
+            color: #d1d9e6;
+            transition: all 0.3s ease;
+        }
+
+        .active .material-icons, .list-item:hover .material-icons {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .list-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .items-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="rise-container">
+    <h2>What You Help the Model Do</h2>
+    <p class="subtitle">Through your evaluations, you help AI models:</p>
+
+    <div class="wave-box">
+        <div class="filter-line"></div>
+        <svg viewBox="0 0 800 120" preserveAspectRatio="none" style="width:100%; height:100%;">
+            <path id="noisy-wave" fill="none" stroke="#333" stroke-width="2" d="M 0 51.535321837338884 L 5 46.154728544690094 L 10 40.10208104482776 L 15 47.50934506719112 L 20 41.59109576550798 L 25 38.5998263790975 L 30 40.86168718753957 L 35 38.25105392534727 L 40 35.46396389573729 L 45 44.88614702644739 L 50 41.793796113688636 L 55 48.667015355096694 L 60 53.15180916749525 L 65 52.10492230313703 L 70 48.69302784465112 L 75 50.48770303962541 L 80 60.597741047793015 L 85 63.31475649034997 L 90 62.30875102136333 L 95 62.518507858144126 L 100 72.43304316986712 L 105 77.1624839271353 L 110 80.78742188006251 L 115 76.7445693249915 L 120 73.33164853031973 L 125 79.45116602139845 L 130 81.72532549845332 L 135 79.61159142381594 L 140 74.9420523700793 L 145 78.06654656530883 L 150 78.21056700145374 L 155 74.04880765636159 L 160 79.45142116599021 L 165 77.06232046874906 L 170 67.86067231023046 L 175 63.514636736205695 L 180 62.76959702573586 L 185 64.02842714300151 L 190 55.76042311972659 L 195 57.87494177829798 L 200 50.85073958268001 L 205 44.20415317198917 L 210 52.38754340601661 L 215 41.30199767159065 L 220 47.62811625058232 L 225 44.3923741982301 L 230 41.74283433372941 L 235 39.28236254973075 L 240 34.93449060960603 L 245 36.10266846333356 L 250 37.466541412988065 L 255 47.66002093850131 L 260 45.5345382968798 L 265 45.65198066834921 L 270 47.55851475342249 L 275 54.74167124685021 L 280 53.25290039758664 L 285 50.655103564627844 L 290 65.02175416458958 L 295 64.42603984023627 L 300 61.83938468704345 L 305 61.99738718837298 L 310 73.89226741136989 L 315 76.99152811736955 L 320 71.90419423900164 L 325 71.28030479533945 L 330 74.38877248025318 L 335 73.88082381259288 L 340 76.6265832230686 L 345 84.29035011028182 L 350 83.4556191713567 L 355 82.22340963140891 L 360 78.19646131055843 L 365 75.95092118935696 L 370 72.16605375610378 L 375 66.46517805993382 L 380 64.38933278197109 L 385 71.80595933754849 L 390 59.72899606109457 L 395 66.48342442996929 L 400 52.04101297392538 "></path>
+            <path id="clean-wave" fill="none" stroke="#317eff" stroke-width="2" d="M 400 52.04101297392538 L 405 54.72737790797192 L 410 51.90355285993129 L 415 49.26155655975327 L 420 46.86072254853181 L 425 44.75496838226974 L 430 42.991584759803686 L 435 41.61017347566426 L 440 40.64175804914825 L 445 40.10808700295468 L 450 40.02114543825497 L 455 40.382885875157086 L 460 41.1851844033147 L 465 42.410023127437796 L 470 44.0298948103791 L 475 46.008420626374665 L 480 48.30116715104638 L 485 50.856644240319355 L 490 53.61746138804833 L 495 56.52161659306601 L 500 59.50388879045262 L 505 62.497302576053364 L 510 65.43463232966197 L 515 68.24991195751741 L 520 70.8799163485629 L 525 73.26558127412665 L 530 75.35332984316996 L 535 77.09627572375157 L 540 78.4552761089607 L 545 79.39981077997756 L 550 79.9086675243863 L 555 79.97041851673804 L 560 79.58367696287154 L 565 78.7571282443216 L 570 77.50933486337297 L 575 75.86831956927973 L 580 73.87093602772777 L 585 71.56204116695598 L 590 68.99348778785705 L 595 66.2229600618511 L 600 63.3126780687629 L 605 60.328000467960486 L 610 57.33595668377361 L 615 54.403741569133686 L 620 51.59720635403261 L 625 48.97937976887275 L 630 46.609052555056415 L 635 44.539457151682925 L 640 42.81707220973063 L 645 41.48057878175289 L 650 40.55999162883421 L 655 40.075985153760406 L 660 40.039429098505664 L 665 40.45114443326084 L 670 41.30188491921326 L 675 42.57254475913544 L 680 44.23458767240306 L 685 46.25068775833689 L 690 48.57556775545923 L 695 51.15701587118034 L 700 53.93705834609113 L 705 56.853261419622 L 710 59.84013345770341 L 715 62.83059575367187 L 720 65.75748897141634 L 725 68.55508139927144 L 730 71.16054514256015 L 735 73.5153671026556 L 740 75.56666305502719 L 745 77.26836531491789 L 750 78.58225731822165 L 755 79.47883188312812 L 760 79.93795387780963 L 765 79.94931241207362 L 770 79.51265239772805 L 775 78.63778027731232 L 780 77.3443437925385 L 785 75.66139073837029 L 790 73.62671661217405 L 795 71.28601580832549 L 800 68.69185542062927 "></path>
+        </svg>
+    </div>
+
+    <div class="items-container">
+        <div class="list-item" id="item1">
+            <span class="material-icons">hearing</span>
+            Hear real-world speech more accurately
+        </div>
+        <div class="list-item active" id="item2">
+            <span class="material-icons">record_voice_over</span>
+            Speak in ways humans understand and trust
+        </div>
+    </div>
+</div>
+
+<script>
+    const noisyPath = document.getElementById('noisy-wave');
+    const cleanPath = document.getElementById('clean-wave');
+    let offset = 0;
+
+    function drawWaves() {
+        let nPoints = "";
+        let cPoints = "";
+        
+        for (let x = 0; x <= 800; x += 5) {
+            // Slower frequency and reduced noise amplitude
+            let baseSine = Math.sin((x + offset) * 0.03) * 20;
+            let noise = (Math.random() - 0.5) * 12; // Reduced noise
+            let yNoisy = 60 + baseSine + noise;
+            let yClean = 60 + baseSine;
+
+            if (x <= 400) {
+                nPoints += `${x === 0 ? 'M' : 'L'} ${x} ${yNoisy} `;
+                if (x === 400) cPoints += `M ${x} ${yNoisy} `;
+            } else {
+                cPoints += `L ${x} ${yClean} `;
+            }
+        }
+        noisyPath.setAttribute('d', nPoints);
+        cleanPath.setAttribute('d', cPoints);
+        
+        offset -= 0.8; // Reduced velocity
+        requestAnimationFrame(drawWaves);
+    }
+    drawWaves();
+
+    // Auto-highlight logic
+    let current = 1;
+    let autoPlay = true;
+
+    const items = [document.getElementById('item1'), document.getElementById('item2')];
+
+    function setActive(index) {
+        items.forEach(item => item.classList.remove('active'));
+        items[index].classList.add('active');
+    }
+
+    setInterval(() => {
+        if(autoPlay) {
+            current = current === 0 ? 1 : 0;
+            setActive(current);
+        }
+    }, 3000);
+
+    // Pause auto-play on hover
+    items.forEach((item, idx) => {
+        item.addEventListener('mouseenter', () => {
+            autoPlay = false;
+            setActive(idx);
+        });
+        item.addEventListener('mouseleave', () => {
+            autoPlay = true;
+            current = idx;
+        });
+    });
+</script>
+
+
+</body></html>

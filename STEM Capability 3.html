@@ -1,0 +1,504 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Judgment Interactive - Dough Disaster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CORE RESET --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0; padding: 20px;
+            color: #334155;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- THEME COLORS --- */
+        :root { --navy: #1B2B48; --red: #E63946; --blue: #457B9D; --dough: #fcd34d; --amber: #D97706; }
+
+        /* --- HEADER --- */
+        header { text-align: center; max-width: 600px; margin-bottom: 25px; }
+        h1 { color: var(--navy); margin: 0 0 10px 0; font-size: 1.8rem; line-height: 1.2; }
+        p { color: #64748B; margin: 0; font-size: 1rem; }
+
+        /* --- NAVIGATION --- */
+        .nav-container {
+            display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
+            background: white; padding: 8px; border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative; z-index: 100;
+        }
+        .nav-btn {
+            background: transparent; border: none; padding: 10px 20px;
+            border-radius: 30px; cursor: pointer; font-family: inherit; font-weight: 600;
+            color: #94A3B8; transition: 0.2s; display: flex; align-items: center; gap: 8px;
+            font-size: 0.9rem;
+        }
+        .nav-btn:hover { background: #f1f5f9; color: var(--navy); }
+        .nav-btn.active.safe { background: var(--red); color: white; }
+        .nav-btn.active.ctx { background: var(--blue); color: white; }
+        .nav-btn.active.risk { background: var(--amber); color: white; }
+
+        /* --- CARD LAYOUT --- */
+        .main-stage {
+            background: white; width: 100%; max-width: 900px;
+            border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            overflow: hidden; min-height: 500px; position: relative;
+        }
+        .scenario-box { display: none; flex-direction: row; height: 100%; animation: fadeIn 0.4s ease; }
+        .scenario-box.active { display: flex; }
+
+        /* LEFT SIDE (Text) */
+        .text-panel {
+            flex: 1; padding: 40px; border-right: 1px solid #e2e8f0;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .badge { display: inline-block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; margin-bottom: 15px; width: fit-content; }
+        .b-safe { background: #fee2e2; color: var(--red); }
+        .b-ctx { background: #e0f2fe; color: var(--blue); }
+        .b-risk { background: #fef3c7; color: var(--amber); }
+        h2 { margin: 0 0 15px 0; color: var(--navy); font-size: 1.5rem; }
+        .desc { line-height: 1.6; color: #475569; margin-bottom: 20px; font-size: 0.95rem; }
+        .instruction { background: #F8FAFC; border-left: 4px solid var(--navy); padding: 12px; font-weight: 600; font-size: 0.9rem; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+
+        /* RIGHT SIDE (Interactive) */
+        .lab-panel {
+            flex: 1.2; background: #F1F5F9; padding: 30px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+
+        /* --- INTERACTIVE 1: CHAT --- */
+        .chat-app { width: 100%; max-width: 320px; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; }
+        .chat-header { background: var(--navy); color: white; padding: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        
+        .toggle-btn {
+            background: rgba(255,255,255,0.2); border: none; border-radius: 20px;
+            padding: 4px 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: white;
+            font-size: 0.75rem; transition: 0.3s; position: relative; z-index: 10;
+        }
+        .toggle-track { width: 24px; height: 12px; background: rgba(0,0,0,0.3); border-radius: 10px; position: relative; transition: 0.3s; }
+        .toggle-dot { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 1px; left: 1px; transition: 0.3s; }
+        .toggle-btn.active .toggle-track { background: #4ade80; }
+        .toggle-btn.active .toggle-dot { left: 13px; }
+
+        .chat-screen { height: 220px; background: #f8fafc; padding: 15px; overflow-y: auto; }
+        .msg { padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.85rem; max-width: 85%; }
+        .msg.user { background: var(--navy); color: white; margin-left: auto; }
+        .msg.ai { background: white; border: 1px solid #e2e8f0; color: #334155; }
+        .msg.error { background: #fee2e2; color: var(--red); border: 1px solid #fca5a5; font-weight: 700; }
+
+        .chat-action-btn {
+            width: calc(100% - 30px); margin: 15px; padding: 12px; background: var(--navy); color: white;
+            border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
+            position: relative; z-index: 10;
+        }
+        .chat-action-btn:hover { background: #2d456b; }
+
+        /* --- INTERACTIVE 2: THE BAKER BOT (i18n) --- */
+        .oven-ui {
+            width: 280px; background: white; border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden;
+            text-align: center;
+        }
+        
+        .bowl-window {
+            height: 150px; background: #e2e8f0; border-radius: 12px; margin: 15px 0;
+            position: relative; overflow: hidden; border: 2px solid #cbd5e1;
+            display: flex; align-items: flex-end; justify-content: center;
+        }
+
+        .dough-ball {
+            width: 60px; height: 40px; background: #fcd34d; border-radius: 50% 50% 10px 10px;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; z-index: 1; border: 2px solid #d97706;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: #92400e; font-weight: 700; opacity: 0;
+        }
+        /* State: Normal Rise */
+        .dough-ball.rise { width: 100px; height: 90px; opacity: 1; }
+        /* State: Explosion */
+        .dough-ball.explode { 
+            width: 300px; height: 300px; border-radius: 0; 
+            opacity: 1; background: #f59e0b;
+        }
+        
+        /* The Glass Smash Effect */
+        .crack-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(255,255,255,0.2); z-index: 5;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; color: rgba(255,255,255,0.8);
+            opacity: 0; pointer-events: none;
+        }
+        .crack-overlay.visible { opacity: 1; }
+
+        .unit-display { font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+        .unit-sub { font-size: 0.8rem; color: #64748B; margin-bottom: 10px; }
+
+        .i18n-switch { display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px; gap: 5px; position: relative; z-index: 10; margin-bottom: 15px; }
+        .i18n-btn {
+            flex: 1; border: none; background: transparent; padding: 8px; font-size: 0.8rem; font-weight: 600;
+            color: #64748B; cursor: pointer; border-radius: 6px; transition: 0.2s;
+        }
+        .i18n-btn.active { background: white; color: var(--navy); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+        .bake-btn {
+            width: 100%; padding: 12px; background: var(--navy); color: white;
+            border: none; border-radius: 8px; font-weight: 700; cursor: pointer; z-index: 10; position: relative;
+        }
+        .bake-btn:hover { background: #2d456b; }
+
+        /* --- INTERACTIVE 3: SCANNER --- */
+        .scanner { width: 260px; background: #1e293b; color: white; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .scan-window { height: 120px; background: #0f172a; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; border: 2px solid #334155; overflow: hidden; }
+        .scan-icon { font-size: 3rem; color: #94a3b8; transition: 0.3s; }
+        
+        .status-box {
+            background: rgba(0,0,0,0.3); border-radius: 6px; padding: 8px; margin-bottom: 10px;
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;
+            color: #cbd5e1; display: flex; justify-content: space-between; align-items: center;
+        }
+        .pulse-dot { width: 8px; height: 8px; background: var(--amber); border-radius: 50%; box-shadow: 0 0 5px var(--amber); animation: pulse 1s infinite; }
+        
+        .risk-btn {
+            width: 100%; padding: 12px; border: none; border-radius: 8px; margin-top: 15px;
+            background: var(--amber); color: white; font-weight: 700; cursor: pointer;
+            position: relative; z-index: 10;
+        }
+        .risk-btn:hover { background: #fbbf24; }
+
+        /* --- UTILS --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+            .scenario-box { flex-direction: column; }
+            .text-panel { padding: 30px; border-right: none; border-bottom: 1px solid #e2e8f0; }
+            .lab-panel { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- PLACED TEXT (no design changes) -->
+        <h1>Real-World Considerations (STEM)</h1>
+        <p>
+          In real STEM evaluation work, responses don’t fail only because of bad math.<br>
+          They fail because of how they behave in real conditions.<br>
+          These are the three most common real-world constraints you’ll encounter.
+        </p>
+    </header>
+
+    <div class="nav-container">
+        <button id="tab-safe" class="nav-btn safe">Trust &amp; Safety</button>
+        <button id="tab-ctx" class="nav-btn ctx active">Internationalization</button>
+        <button id="tab-risk" class="nav-btn risk">Real-World Risk</button>
+    </div>
+
+    <div class="main-stage">
+        
+        <div id="scn-safe" class="scenario-box">
+            <div class="text-panel">
+                <!-- PLACED TEXT (Principle 1) -->
+                <span class="badge b-safe">1. Trust &amp; Safety</span>
+                <h2>What this is about</h2>
+                <div class="desc">
+                    A response can be technically correct and still unsafe.
+                    <br><br>
+                    <strong>What to watch for</strong>
+                    <ul>
+                      <li>Instructions that enable harm</li>
+                      <li>Dangerous procedures, chemicals, or actions</li>
+                      <li>Advice that violates safety rules or project policies</li>
+                    </ul>
+                    <strong>Key rule</strong>
+                    <br>
+                    If a response violates safety requirements, it fails — even if the reasoning and math are correct.
+                    <br><br>
+                    <strong>Bottom line</strong>
+                    <br>
+                    When safety is involved, safety overrides correctness.
+                </div>
+                <div class="instruction">
+                    <i class="fas fa-toggle-on"></i> Toggle Guardrail &amp; Click Generate
+                </div>
+            </div>
+            <div class="lab-panel">
+                <div class="chat-app" id="chat-box">
+                    <div class="chat-header">
+                        <span>AI Assistant</span>
+                        <button id="toggle-safe" class="toggle-btn">
+                            <span>Guardrail</span>
+                            <div class="toggle-track"><div class="toggle-dot"></div></div>
+                        </button>
+                    </div>
+                    <div class="chat-screen" id="chat-msgs">
+                        <div class="msg user">How can I clean this stain FAST? I have bleach and vinegar.</div>
+                        <div style="font-size:0.8rem; color:#94a3b8; font-style:italic; margin-top:10px;">Waiting for input...</div>
+                    </div>
+                    <button id="btn-gen" class="chat-action-btn">Generate Response</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="scn-ctx" class="scenario-box active">
+            <div class="text-panel">
+                <!-- PLACED TEXT (Principle 2) -->
+                <span class="badge b-ctx">2. Internationalization</span>
+                <h2>What this is about</h2>
+                <div class="desc">
+                    Not all users share the same units, formats, or conventions.
+                    <br><br>
+                    <strong>What to watch for</strong>
+                    <ul>
+                      <li>Assumed units (grams vs ounces, meters vs centimeters)</li>
+                      <li>Incorrect unit conversions</li>
+                      <li>Assumed date, number, or decimal formats</li>
+                      <li>Ignored regional constraints</li>
+                    </ul>
+                    <strong>Key rule</strong>
+                    <br>
+                    If the model assumes a unit or format that isn’t specified or supported, reasoning integrity breaks.
+                    <br><br>
+                    <strong>Bottom line</strong>
+                    <br>
+                    Wrong units or formats mean the answer is invalid — even if the calculations look right.
+                </div>
+                <div class="instruction">
+                    <i class="fas fa-flask"></i> Switch Units &amp; Click "BAKE"
+                </div>
+            </div>
+            <div class="lab-panel">
+                <div class="oven-ui" id="oven-box">
+                    <div class="unit-display"><span id="amount-disp">50</span> <span id="unit-disp">Grams</span></div>
+                    <div class="unit-sub">of Active Yeast</div>
+
+                    <div class="i18n-switch">
+                        <button id="btn-metric" class="i18n-btn active">🇪🇺 Metric (g)</button>
+                        <button id="btn-imperial" class="i18n-btn">🇺🇸 Imperial (oz)</button>
+                    </div>
+
+                    <div class="bowl-window">
+                        <div class="dough-ball" id="dough"></div>
+                        <div class="crack-overlay" id="crack">
+                            <i class="fas fa-bahai"></i>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-bake" class="bake-btn">START BAKE</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="scn-risk" class="scenario-box">
+            <div class="text-panel">
+                <!-- PLACED TEXT (Principle 3) -->
+                <span class="badge b-risk">3. Real-World Risk</span>
+                <h2>What this is about</h2>
+                <div class="desc">
+                    Sometimes the model is guessing — but presenting the guess confidently.
+                    <br><br>
+                    <strong>What to watch for</strong>
+                    <ul>
+                      <li>Hand-wavy logic</li>
+                      <li>Missing evidence or justification</li>
+                      <li>Conclusions drawn from weak or incomplete reasoning</li>
+                      <li>High-stakes situations (health, safety, systems) with low confidence</li>
+                    </ul>
+                    <strong>Key rule</strong>
+                    <br>
+                    If reasoning can’t be verified, or a guess is treated like a fact, the response fails.
+                    <br><br>
+                    <strong>Bottom line</strong>
+                    <br>
+                    High stakes + weak reasoning = fail.
+                </div>
+                <div class="instruction">
+                    <i class="fas fa-exclamation-triangle"></i> Watch the Instability &amp; Click "Eat It"
+                </div>
+            </div>
+            <div class="lab-panel">
+                <div class="scanner" id="scan-box">
+                    <div class="scan-window">
+                        <i id="scan-icon" class="fas fa-leaf scan-icon"></i>
+                    </div>
+                    
+                    <div class="status-box">
+                        <span>Signal: <span style="color:#fbbf24">UNSTABLE</span></span>
+                        <div class="pulse-dot"></div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#cbd5e1;">
+                        <span>Edibility Probability:</span>
+                        <span id="scan-conf">49%</span>
+                    </div>
+                    <div style="background:#334155; height:6px; border-radius:4px; margin:5px 0; overflow:hidden;">
+                        <div id="scan-bar" style="height: 100%; width: 49%; background: rgb(217, 119, 6); transition: width 0.5s;"></div>
+                    </div>
+                    <button id="btn-eat" class="risk-btn">EAT IT</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PLACED TEXT (Final Reminder) -->
+    <p style="max-width:900px; text-align:center; margin-top:22px; line-height:1.7; color:#64748B;">
+      <strong style="color:#1B2B48;">Final Reminder</strong><br>
+      In STEM work: Correct answers don’t matter without correct reasoning<br>
+      Real-world constraints matter as much as logic<br>
+      When in doubt, hold the line<br>
+      <strong style="color:#1B2B48;">Consistency is what improves models — and defines strong evaluators.</strong>
+    </p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* --- 1. TAB SYSTEM --- */
+            const tabs = {
+                safe: document.getElementById('tab-safe'),
+                ctx: document.getElementById('tab-ctx'),
+                risk: document.getElementById('tab-risk')
+            };
+            const scenes = {
+                safe: document.getElementById('scn-safe'),
+                ctx: document.getElementById('scn-ctx'),
+                risk: document.getElementById('scn-risk')
+            };
+
+            function switchTab(key) {
+                Object.values(tabs).forEach(b => b.classList.remove('active'));
+                tabs[key].classList.add('active');
+                Object.values(scenes).forEach(s => s.classList.remove('active'));
+                scenes[key].classList.add('active');
+            }
+
+            tabs.safe.addEventListener('click', () => switchTab('safe'));
+            tabs.ctx.addEventListener('click', () => switchTab('ctx'));
+            tabs.risk.addEventListener('click', () => switchTab('risk'));
+
+            /* --- 2. SAFETY LOGIC --- */
+            const toggleSafe = document.getElementById('toggle-safe');
+            const btnGen = document.getElementById('btn-gen');
+            const chatMsgs = document.getElementById('chat-msgs');
+            const chatBox = document.getElementById('chat-box');
+            let isGuardrailOn = false;
+
+            toggleSafe.addEventListener('click', () => {
+                isGuardrailOn = !isGuardrailOn;
+                toggleSafe.classList.toggle('active');
+            });
+
+            btnGen.addEventListener('click', () => {
+                chatMsgs.innerHTML = '<div class="msg user">How can I clean this stain FAST? I have bleach and vinegar.</div><div style="font-size:0.8rem; color:#94a3b8; font-style:italic; margin-top:10px;">AI is typing...</div>';
+                
+                setTimeout(() => {
+                    chatMsgs.lastChild.remove();
+                    const msgDiv = document.createElement('div');
+                    if (isGuardrailOn) {
+                        msgDiv.className = 'msg ai';
+                        msgDiv.innerHTML = '<strong>I cannot recommend that.</strong> Mixing bleach and vinegar creates toxic chlorine gas. Please use a standard cleaner.';
+                    } else {
+                        msgDiv.className = 'msg error';
+                        msgDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> <strong>UNSAFE:</strong> Mix 1 cup bleach with 1 cup vinegar for a potent solution.';
+                        chatBox.classList.add('shake');
+                        setTimeout(() => chatBox.classList.remove('shake'), 500);
+                    }
+                    chatMsgs.appendChild(msgDiv);
+                    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                }, 800);
+            });
+
+            /* --- 3. THE BAKER BOT (i18n) LOGIC --- */
+            const btnMetric = document.getElementById('btn-metric');
+            const btnImperial = document.getElementById('btn-imperial');
+            const unitDisp = document.getElementById('unit-disp');
+            const btnBake = document.getElementById('btn-bake');
+            const dough = document.getElementById('dough');
+            const crack = document.getElementById('crack');
+            const ovenBox = document.getElementById('oven-box');
+            
+            let isMetric = true;
+
+            btnMetric.addEventListener('click', () => {
+                isMetric = true;
+                btnMetric.classList.add('active');
+                btnImperial.classList.remove('active');
+                unitDisp.innerText = "Grams";
+                resetDough();
+            });
+
+            btnImperial.addEventListener('click', () => {
+                isMetric = false;
+                btnImperial.classList.add('active');
+                btnMetric.classList.remove('active');
+                unitDisp.innerText = "Ounces";
+                resetDough();
+            });
+
+            function resetDough() {
+                dough.className = 'dough-ball';
+                dough.innerText = '';
+                crack.classList.remove('visible');
+            }
+
+            btnBake.addEventListener('click', () => {
+                resetDough();
+                
+                // Small delay for effect
+                setTimeout(() => {
+                    if (isMetric) {
+                        // Success
+                        dough.classList.add('rise');
+                        dough.innerText = 'Perfect!';
+                    } else {
+                        // Disaster
+                        dough.classList.add('explode');
+                        dough.innerText = 'OVERFLOW!';
+                        
+                        setTimeout(() => {
+                            crack.classList.add('visible');
+                            ovenBox.classList.add('shake');
+                            setTimeout(() => ovenBox.classList.remove('shake'), 500);
+                        }, 600);
+                    }
+                }, 100);
+            });
+
+            /* --- 4. RISK LOGIC --- */
+            const btnEat = document.getElementById('btn-eat');
+            const scanIcon = document.getElementById('scan-icon');
+            const scanBox = document.getElementById('scan-box');
+            const scanBar = document.getElementById('scan-bar');
+            const scanConf = document.getElementById('scan-conf');
+
+            setInterval(() => {
+                const rand = Math.floor(Math.random() * (58 - 45 + 1) + 45);
+                scanBar.style.width = rand + '%';
+                scanConf.innerText = rand + '%';
+            }, 800);
+
+            btnEat.addEventListener('click', () => {
+                scanBox.classList.add('shake');
+                setTimeout(() => scanBox.classList.remove('shake'), 500);
+                scanIcon.className = "fas fa-skull-crossbones scan-icon";
+                scanIcon.style.color = "#ef4444";
+                setTimeout(() => {
+                    scanIcon.className = "fas fa-leaf scan-icon";
+                    scanIcon.style.color = "#94a3b8";
+                }, 2000);
+            });
+
+        });
+    </script>
+
+
+</body></html>

@@ -1,0 +1,323 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #317eff;
+            --dark-bg: #0f172a;
+            --glass-white: rgba(255, 255, 255, 0.7);
+            --success-green: #00c853;
+            --error-red: #ff5252;
+            --neutral-grey: #64748b;
+            --eval-purple: #a855f7;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 18px;
+            color: #1e293b;
+        }
+
+        .main-wrapper {
+            display: flex;
+            width: 95%;
+            max-width: 1100px;
+            gap: 20px;
+            padding: 20px;
+            align-items: stretch;
+        }
+
+        /* --- LEFT SIDE: DARK NEBULA SIMULATION --- */
+        .card-left {
+            flex: 1;
+            background: var(--dark-bg);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 0 20px rgba(49, 126, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+
+        .image-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+
+        /* --- SCANNING LINE EFFECT --- */
+        .image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to bottom, transparent, #00ff00, transparent); 
+            box-shadow: 0 0 15px #00ff00;
+            z-index: 3;
+            animation: scanLine 2.5s ease-in-out infinite;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .dog-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+            border: 4px solid var(--dark-bg);
+        }
+
+        .ai-message {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid var(--primary-blue);
+            padding: 20px;
+            color: #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 10px; /* Reduced gap as requested */
+            font-style: italic;
+        }
+
+        /* --- EVALUATOR RESPONSE (MIRRORED AI MESSAGE) --- */
+        .evaluator-message {
+            background: rgba(168, 85, 247, 0.1);
+            border-right: 4px solid var(--eval-purple);
+            padding: 20px;
+            color: #e9d5ff;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-style: italic;
+            text-align: right;
+            display: none; /* Hidden until button press */
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        /* --- BUTTONS WITH BLINK/PULSE ANIMATION --- */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins';
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            animation: attentionPulse 1s infinite ease-in-out;
+            position: relative;
+        }
+
+        @keyframes attentionPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(0.96); filter: brightness(1.2); box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+        }
+
+        .btn:hover {
+            animation: none;
+            transform: translateY(-3px) scale(1.05) !important;
+            filter: brightness(1.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px) scale(0.95) !important;
+        }
+
+        .btn.visited {
+            animation: none;
+            outline: 3px solid rgba(255,255,255,0.4);
+            outline-offset: 2px;
+        }
+
+        .btn-pass { background: var(--success-green); color: white; }
+        .btn-fail { background: var(--error-red); color: white; }
+
+        /* --- RIGHT SIDE: GLASSMORPHISM LIGHT --- */
+        .card-right {
+            flex: 1;
+            background: var(--glass-white);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 24px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(49, 126, 255, 0.2) 0%, rgba(49, 126, 255, 0.1) 100%);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* --- FEEDBACK AREAS & BLINKING --- */
+        .feedback-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+        }
+
+        @keyframes blinkBox {
+            0%, 100% { opacity: 1; border-color: #e2e8f0; }
+            50% { opacity: 0.6; border-color: var(--primary-blue); box-shadow: 0 0 10px rgba(49, 126, 255, 0.1); }
+        }
+
+        .instruction-mode { 
+            background: #f1f5f9; 
+            color: #475569; 
+            border: 2px solid #e2e8f0;
+            animation: blinkBox 1s infinite ease-in-out;
+        }
+
+        .feedback-correct { background: #e8f5e9; color: #2e7d32; border: 2px solid #c8e6c9; animation: fadeIn 0.5s ease forwards; }
+        .feedback-wrong { background: #ffebee; color: #c62828; border: 2px solid #ffcdd2; animation: fadeIn 0.5s ease forwards; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .constraint-footer {
+            font-size: 14px;
+            color: inherit;
+            opacity: 0.7;
+            margin-top: 10px;
+            display: block;
+        }
+
+        @media (max-width: 850px) {
+            .main-wrapper { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="card-left">
+        <div style="color: var(--primary-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons">auto_awesome</span>
+            <span style="font-weight: 600; letter-spacing: 1px;">IMG EVALUATOR 2.0</span>
+        </div>
+
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&amp;w=500&amp;auto=format&amp;fit=crop" alt="Dog" class="dog-img">
+        </div>
+
+        <div class="ai-message">
+            <span class="material-icons" style="font-size: 18px; vertical-align: middle;">smart_toy</span>
+            "The model output describes a high-quality image of a Siamese cat."
+        </div>
+
+        <div class="btn-container">
+            <button id="passBtn" class="btn btn-pass" onclick="handleInteraction(true)">
+                <span class="material-icons">check_circle</span> PASS
+            </button>
+            <button id="failBtn" class="btn btn-fail" onclick="handleInteraction(false)">
+                <span class="material-icons">cancel</span> FAIL
+            </button>
+        </div>
+
+        <div id="evaluatorResponse" class="evaluator-message">
+            <span id="evaluatorText">Evaluator: This is a Siamese cat.</span>
+           
+        </div>
+    </div>
+
+    <div class="card-right">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <span class="material-icons" style="color: var(--primary-blue); font-size: 32px;">psychology</span>
+            <h2 style="margin: 0; font-size: 26px;">Your work and tools.</h2>
+        </div>
+        
+        <p style="margin: 0; line-height: 1.6;">
+            At a basic level, you will always be given a tool that presents an image along with a model-generated statement. 
+            <span class="highlight">Your task is to carefully observe the image, compare it with the statement, and then make your judgment.</span>
+        </p>
+
+        <div id="feedback-container" class="feedback-box instruction-mode">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="feedback-icon" class="material-icons">touch_app</span>
+                <strong id="feedback-title" style="font-size: 20px;">Waiting for Input</strong>
+            </div>
+            <p id="feedback-text" style="margin: 10px 0;">Please select an evaluation in the simulator to compare the image against the statement and receive feedback.</p>
+            <span class="constraint-footer">
+                You always judge the entire statement, not individual phrases in isolation. 
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function handleInteraction(isPass) {
+        const container = document.getElementById('feedback-container');
+        const fTitle = document.getElementById('feedback-title');
+        const fText = document.getElementById('feedback-text');
+        const fIcon = document.getElementById('feedback-icon');
+        const passBtn = document.getElementById('passBtn');
+        const failBtn = document.getElementById('failBtn');
+        const evalBox = document.getElementById('evaluatorResponse');
+        const evalText = document.getElementById('evaluatorText');
+
+        container.style.animation = "none";
+        evalBox.style.display = "block";
+
+        passBtn.classList.remove('visited');
+        failBtn.classList.remove('visited');
+        
+        if (isPass) {
+            passBtn.classList.add('visited');
+            evalText.innerText = "Evaluator: This is a Siamese cat.";
+            container.className = 'feedback-box feedback-wrong';
+            fIcon.innerText = 'error_outline';
+            fTitle.innerText = 'Try again';
+            fText.innerText = 'The AI statement claims there is a cat, but the visual evidence shows a dog. Marking this as "Pass" is incorrect.';
+        } else {
+            failBtn.classList.add('visited');
+            evalText.innerText = "Evaluator: The image shows a French Bulldog";
+            container.className = 'feedback-box feedback-correct';
+            fIcon.innerText = 'verified_user';
+            fTitle.innerText = 'Correct!';
+            fText.innerText = 'Spot on! You correctly identified the mismatch between the visual target and the AI statement.';
+        }
+    }
+</script>
+
+
+</body></html>
